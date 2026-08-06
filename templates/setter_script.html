@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setter Script - ACMARKETING</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/script.css') }}">
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-container">
+            <div class="logo">
+                <span class="logo-text">ACMARKETING</span>
+            </div>
+            <div class="nav-links">
+                <a href="/" class="nav-link">Dashboard</a>
+                <a href="/add-lead" class="nav-link">Add Lead</a>
+                <a href="/setter-script" class="nav-link active">Setter Script</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="script-section">
+            <h1>Setter Instructions</h1>
+            <p class="subtitle">Your Job Is To Book The Appointment (Nothing Else)</p>
+
+            <div class="important-note">
+                <strong>⚠️ Important:</strong> You are NOT doing discovery and NOT pitching/closing. Those happen on the call with me. Your only goal: get them curious enough to book a time, then confirm they'll actually show up.
+            </div>
+
+            <!-- The Process -->
+            <div class="script-card">
+                <div class="script-header red-accent">The Process</div>
+                <div class="script-content">
+                    <ol style="font-size: 1.1rem; line-height: 2;">
+                        <li><strong>During the day:</strong> scrape leads</li>
+                        <li><strong>That night:</strong> send each lead a text/DM</li>
+                        <li><strong>Next day:</strong> call them, referencing the text</li>
+                    </ol>
+                </div>
+            </div>
+
+            <!-- Step 1 -->
+            <div class="script-card">
+                <div class="script-header red-accent">Step 1 — Opener</div>
+                <div class="script-content">
+                    <p class="script-line"><strong>"Hey [Name], this is [Your Name]. I sent you a message [yesterday/this morning] — were you able to see it?"</strong></p>
+
+                    <div class="response-branch">
+                        <p><strong>If yes:</strong> skip to Step 2.</p>
+                    </div>
+
+                    <div class="response-branch">
+                        <p><strong>If no:</strong></p>
+                        <p class="script-line"><strong>"No worries — quick rundown: we're calling because a lot of contractors either want more jobs but don't know who to trust, or they've tried to get more work and gotten scammed. We're looking for contractors who want to grow but just need the right guidance. Does that sound like you at all?"</strong></p>
+                    </div>
+
+                    <div class="important-note" style="margin-top: 1rem;">
+                        If they say <strong>"not really"</strong> — thank them and move on. Don't push.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="script-card">
+                <div class="script-header red-accent">Step 2 — Spark Curiosity (keep it short, don't explain how it works)</div>
+                <div class="script-content">
+                    <p class="script-line"><strong>"Yeah, honestly — we've worked with a [their trade] company having that same issue, and we were able to help them fix it. I'm not here to pitch you or convince you of anything today — I just want to get you on a quick call with my partner to show you the results and see if it's even a fit. If not, no worries at all."</strong></p>
+
+                    <div class="important-note" style="margin-top: 1rem;">
+                        <strong>DO NOT get into:</strong>
+                        <ul>
+                            <li>Specifics of how it works</li>
+                            <li>Pricing</li>
+                            <li>The offer details</li>
+                        </ul>
+                        <p style="margin-top: 0.8rem;"><strong>If they ask detailed questions:</strong></p>
+                        <p class="script-line"><strong>"Great question — that's exactly what we'll cover on the call, I don't want to give you half the picture."</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="script-card">
+                <div class="script-header red-accent">Step 3 — Book The Time</div>
+                <div class="script-content">
+                    <p class="script-line"><strong>"Is that something you'd be open to jumping on a quick call for?"</strong></p>
+
+                    <div class="response-branch">
+                        <p><strong>If yes:</strong> Lock in a specific day/time. Don't be vague.</p>
+                    </div>
+
+                    <div class="response-branch">
+                        <p><strong>If no:</strong> Move on to the next lead. No negotiating.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="script-card">
+                <div class="script-header red-accent">Step 4 — No-Show Filter (say this EVERY time, right after booking)</div>
+                <div class="script-content">
+                    <p class="script-line"><strong>"One thing — you know how it goes when someone books an estimate and then doesn't show or cancels last minute? I want to avoid wasting your time and ours. So be honest with me — are you actually going to be there [day/time]? If not, totally fine to say so now."</strong></p>
+
+                    <div class="important-note" style="margin-top: 1rem;">
+                        <strong>Why this matters:</strong> This filters out people who won't show. You're giving them a guilt-free way to say no NOW instead of ghosting.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Call Tracking -->
+            <div class="script-card">
+                <div class="script-header red-accent">After Each Call — Log This</div>
+                <div class="script-content">
+                    <ul style="font-size: 1.05rem; line-height: 1.8;">
+                        <li>✓ Did they book? (yes/no)</li>
+                        <li>✓ Date & time confirmed</li>
+                        <li>✓ Call status (not contacted, attempted, connected, converted, declined)</li>
+                        <li>✓ Any notes from the conversation</li>
+                        <li>✓ Did they pass the no-show filter?</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Key Mindset -->
+            <div class="mindset-box">
+                <h2>🎯 Key Mindset</h2>
+                <div class="mindset-item">
+                    <p><strong>You're not selling anything.</strong> You're just getting them curious enough to take a call.</p>
+                </div>
+                <div class="mindset-item">
+                    <p><strong>No means no.</strong> If they say no or "not really," thank them and hang up. Don't negotiate or overcome objections.</p>
+                </div>
+                <div class="mindset-item">
+                    <p><strong>Specificity matters.</strong> Always lock in a specific day/time. "Let me know" = wasted effort.</p>
+                </div>
+                <div class="mindset-item">
+                    <p><strong>The filter question is your friend.</strong> Better they say no now than ghost you later.</p>
+                </div>
+                <div class="mindset-item">
+                    <p><strong>Your job ends when they book.</strong> Everything else is my job on the call.</p>
+                </div>
+            </div>
+
+            <!-- Quick Reference -->
+            <div class="quick-ref">
+                <h2>Quick Reference Card</h2>
+                <div class="ref-grid">
+                    <div class="ref-card">
+                        <h3>Step 1</h3>
+                        <p>"Did you see my message?"</p>
+                    </div>
+                    <div class="ref-card">
+                        <h3>Step 2</h3>
+                        <p>"We helped [trade] fix that. Quick call?"</p>
+                    </div>
+                    <div class="ref-card">
+                        <h3>Step 3</h3>
+                        <p>"Lock in specific day/time"</p>
+                    </div>
+                    <div class="ref-card">
+                        <h3>Step 4</h3>
+                        <p>"Will you actually show up?"</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: acmarketing-dashboard
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python dashboard.py
+    envVars:
+      - key: DASHBOARD_HOST
+        value: 0.0.0.0
+      - key: DASHBOARD_PORT
+        value: 5000

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACMARKETING - Lead Scraper Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-container">
+            <div class="logo">
+                <span class="logo-text">ACMARKETING</span>
+            </div>
+            <div class="nav-links">
+                <a href="/" class="nav-link active">Dashboard</a>
+                <a href="/add-lead" class="nav-link">Add Lead</a>
+                <a href="/setter-script" class="nav-link">Setter Script</a>
+            </div>
+            <div class="nav-info">
+                <span id="last-updated"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total Leads</div>
+                <div class="stat-value" id="stat-total">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">High Priority</div>
+                <div class="stat-value priority" id="stat-priority">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">No Website</div>
+                <div class="stat-value" id="stat-no-website">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Has Website</div>
+                <div class="stat-value" id="stat-has-website">0</div>
+            </div>
+        </div>
+
+        <div class="filters-section">
+            <div class="filters-header">
+                <h2>Filters & Quick View</h2>
+            </div>
+            <div class="quick-stats">
+                <button class="quick-stat-btn active" data-filter="all">
+                    <span class="stat-number" id="count-all">0</span>
+                    <span>All Leads</span>
+                </button>
+                <button class="quick-stat-btn" data-filter="not_contacted">
+                    <span class="stat-number" id="count-not-contacted">0</span>
+                    <span>Not Called Yet</span>
+                </button>
+                <button class="quick-stat-btn" data-filter="attempted">
+                    <span class="stat-number" id="count-attempted">0</span>
+                    <span>Attempted (No Answer)</span>
+                </button>
+                <button class="quick-stat-btn" data-filter="connected">
+                    <span class="stat-number" id="count-connected">0</span>
+                    <span>Connected</span>
+                </button>
+                <button class="quick-stat-btn" data-filter="converted">
+                    <span class="stat-number" id="count-converted">0</span>
+                    <span>Booked</span>
+                </button>
+            </div>
+            <div class="filters-row">
+                <div class="filter-group">
+                    <label for="city-filter">City:</label>
+                    <select id="city-filter">
+                        <option value="all">All Cities</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="qualification-filter">Qualification:</label>
+                    <select id="qualification-filter">
+                        <option value="all">All</option>
+                        <option value="good">Good (High Priority)</option>
+                        <option value="medium">Medium</option>
+                        <option value="low">Low</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="sort-filter">Sort By:</label>
+                    <select id="sort-filter">
+                        <option value="priority_score">Priority Score</option>
+                        <option value="name">Name (A-Z)</option>
+                        <option value="attempts">Attempts</option>
+                    </select>
+                </div>
+                <button id="reset-filters" class="btn-secondary">Reset</button>
+            </div>
+        </div>
+
+        <div class="leads-table-container">
+            <table class="leads-table">
+                <thead>
+                    <tr>
+                        <th>Business Name</th>
+                        <th>Location</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Qualification</th>
+                        <th>Status</th>
+                        <th>Attempts</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="leads-tbody">
+                    <tr class="loading">
+                        <td colspan="8">Loading leads...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="pagination">
+            <button id="prev-page" class="btn-secondary">← Previous</button>
+            <span id="page-info"></span>
+            <button id="next-page" class="btn-secondary">Next →</button>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+from sqlalchemy import create_engine, Column, String, Float, Integer, DateTime, Boolean
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+from datetime import datetime
+from config import DB_PATH
+
+DATABASE_URL = f'sqlite:///{DB_PATH}'
+engine = create_engine(DATABASE_URL, echo=False)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+Base = declarative_base()
+
+
+class Lead(Base):
+    __tablename__ = 'leads'
+
+    id = Column(String, primary_key=True, index=True)  # UUID or auto-generated
+    name = Column(String, index=True, nullable=False)
+    phone = Column(String, nullable=True)
+    email = Column(String, nullable=True)
+    location = Column(String, nullable=True)
+    city = Column(String, index=True, nullable=True)
+    state = Column(String, nullable=True)
+
+    # Qualification & Notes
+    qualification = Column(String, index=True, default='unqualified')  # good/medium/low/unqualified
+    setter_notes = Column(String, nullable=True)  # What to bring up on call
+
+    # Call Tracking
+    call_status = Column(String, default='not_contacted')  # not_contacted/attempted/connected/converted/declined
+    call_outcome = Column(String, nullable=True)  # Notes from the call
+    attempts = Column(Integer, default=0)
+    last_contact_attempt = Column(DateTime, nullable=True)
+
+    # Legacy fields (kept for compatibility)
+    website = Column(String, nullable=True)
+    rating = Column(Float, nullable=True)
+    review_count = Column(Integer, nullable=True, default=0)
+    address = Column(String, nullable=True)
+    category = Column(String, index=True, nullable=True)
+
+    # Flags
+    no_website = Column(Boolean, default=False, index=True)
+    low_reviews = Column(Boolean, default=False, index=True)
+    possibly_inactive = Column(Boolean, default=False, index=True)
+
+    # Metadata
+    priority_score = Column(Float, default=0.0)
+    added_date = Column(DateTime, default=datetime.utcnow, nullable=False)
+    last_updated = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+    follow_up_date = Column(DateTime, nullable=True)
+
+    def __repr__(self):
+        return f'<Lead(id={self.id}, name={self.name}, qualification={self.qualification})>'
+
+
+def init_db():
+    """Initialize database tables."""
+    Base.metadata.create_all(bind=engine)
+
+
+def get_db():
+    """Get database session."""
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
