@@ -6,6 +6,7 @@ from datetime import datetime
 import uuid
 import os
 import csv
+import requests
 from io import StringIO
 
 app = Flask(__name__, template_folder='templates', static_folder='static')
@@ -13,6 +14,39 @@ CORS(app)
 
 # Initialize DB on startup
 init_db()
+
+# Setter CRM Configuration
+SETTER_CRM_API = "https://setter-crm-kappa.vercel.app/api/calls"
+
+
+def sync_to_setter_crm(lead):
+    """Send call log to Setter CRM."""
+    try:
+        # Map call_status to CRM outcome format
+        outcome_map = {
+            'attempted': 'NO_ANSWER',
+            'connected': 'ANSWERED',
+        }
+
+        outcome = outcome_map.get(lead.call_status, 'NO_ANSWER')
+
+        payload = {
+            'contractorName': lead.name,
+            'phone': lead.phone,
+            'outcome': outcome,
+        }
+
+        response = requests.post(SETTER_CRM_API, json=payload, timeout=5)
+
+        if response.status_code in [200, 201]:
+            print(f"✅ Synced to Setter CRM: {lead.name}")
+            return True
+        else:
+            print(f"⚠️ Setter CRM sync failed: {response.status_code}")
+            return False
+    except Exception as e:
+        print(f"❌ Error syncing to Setter CRM: {str(e)}")
+        return False
 
 
 @app.route('/')
@@ -179,7 +213,7 @@ def add_lead():
 
 @app.route('/api/leads/<lead_id>/update', methods=['POST'])
 def update_lead(lead_id):
-    """Update lead call status and notes."""
+    """Update lead call status and notes, then sync to Setter CRM."""
     db = SessionLocal()
     data = request.json
 
@@ -187,6 +221,9 @@ def update_lead(lead_id):
         lead = db.query(Lead).filter(Lead.id == lead_id).first()
         if not lead:
             return jsonify({'success': False, 'error': 'Lead not found'}), 404
+
+        # Check if call_status is being updated
+        is_call_logged = 'call_status' in data
 
         if 'call_status' in data:
             lead.call_status = data['call_status']
@@ -201,6 +238,11 @@ def update_lead(lead_id):
 
         lead.last_updated = datetime.utcnow()
         db.commit()
+
+        # Sync to Setter CRM if call_status was updated
+        if is_call_logged and lead.call_status in ['attempted', 'connected']:
+            sync_to_setter_crm(lead)
+
         db.close()
 
         return jsonify({'success': True}), 200
