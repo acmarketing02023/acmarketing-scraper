@@ -25,7 +25,7 @@ def sync_to_setter_crm(lead):
         # Map call_status to CRM outcome format
         outcome_map = {
             'attempted': 'NO_ANSWER',
-            'connected': 'ANSWERED',
+            'connected': 'CALLBACK',
         }
 
         outcome = outcome_map.get(lead.call_status, 'NO_ANSWER')
