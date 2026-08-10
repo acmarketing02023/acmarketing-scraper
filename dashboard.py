@@ -36,7 +36,13 @@ def sync_to_setter_crm(lead):
             'outcome': outcome,
         }
 
-        response = requests.post(SETTER_CRM_API, json=payload, timeout=5)
+        # Add API key for authentication
+        headers = {
+            'Content-Type': 'application/json',
+            'X-API-Key': 'sk-scraper-acmarketing-9f8d7e6c5b4a3z2x',
+        }
+
+        response = requests.post(SETTER_CRM_API, json=payload, headers=headers, timeout=5)
 
         if response.status_code in [200, 201]:
             print(f"✅ Synced to Setter CRM: {lead.name}")
