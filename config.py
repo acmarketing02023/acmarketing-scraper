@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 GOOGLE_PLACES_API_KEY = os.getenv('GOOGLE_PLACES_API_KEY')
-DB_PATH = os.getenv('DB_PATH', './leads.db')
+DATABASE_URL = os.getenv('DATABASE_URL', 'sqlite:///./leads.db')  # PostgreSQL in production, SQLite locally
 DASHBOARD_HOST = os.getenv('DASHBOARD_HOST', '0.0.0.0')
 DASHBOARD_PORT = int(os.getenv('DASHBOARD_PORT', 5000))
 

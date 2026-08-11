@@ -2,10 +2,9 @@ from sqlalchemy import create_engine, Column, String, Float, Integer, DateTime, 
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime
-from config import DB_PATH
+from config import DATABASE_URL
 
-DATABASE_URL = f'sqlite:///{DB_PATH}'
-engine = create_engine(DATABASE_URL, echo=False)
+engine = create_engine(DATABASE_URL, echo=False, pool_pre_ping=True, pool_recycle=3600)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
