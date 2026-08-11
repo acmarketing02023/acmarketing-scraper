@@ -160,9 +160,8 @@ function renderLeads(leads) {
             </td>
             <td class="actions-cell">
                 <button class="action-btn no-answer" onclick="logCall('${lead.id}', 'attempted', ${(lead.attempts || 0) + 1})" title="Called, no answer">❌ No Answer</button>
-                <button class="action-btn answered" onclick="logCall('${lead.id}', 'connected', ${(lead.attempts || 0) + 1})" title="Called, they answered">✅ Answered</button>
-                <button class="action-btn scheduled" onclick="logCall('${lead.id}', 'scheduled', ${(lead.attempts || 0) + 1})" title="Scheduled for callback">📅 Scheduled</button>
-                <button class="action-btn booked" onclick="logCall('${lead.id}', 'booked', ${(lead.attempts || 0) + 1})" title="Booked appointment">🎯 Booked</button>
+                <button class="action-btn answered" onclick="logCall('${lead.id}', 'connected', ${(lead.attempts || 0) + 1})" title="Called, not interested">✅ Answered</button>
+                <button class="action-btn scheduled" onclick="logCall('${lead.id}', 'scheduled', ${(lead.attempts || 0) + 1})" title="Scheduled for follow-up">📅 Scheduled</button>
                 <button class="action-btn reset" onclick="resetLead('${lead.id}')" title="Undo/Reset this lead">↻ Reset</button>
             </td>
         </tr>
@@ -192,7 +191,10 @@ async function logCall(leadId, status, attempts) {
 
         if (response.ok) {
             // Visual feedback
-            const statusText = status === 'attempted' ? '❌ No Answer' : '✅ Answered';
+            let statusText = '';
+            if (status === 'attempted') statusText = '❌ No Answer';
+            else if (status === 'connected') statusText = '✅ Answered (Not Interested)';
+            else if (status === 'scheduled') statusText = '📅 Scheduled';
             console.log(`Logged: ${statusText}`);
 
             // Reload leads to show updated status
