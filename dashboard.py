@@ -102,7 +102,7 @@ def get_leads():
         'not_contacted': len([l for l in all_leads if l.call_status == 'not_contacted']),
         'attempted': len([l for l in all_leads if l.call_status == 'attempted']),
         'connected': len([l for l in all_leads if l.call_status == 'connected']),
-        'converted': len([l for l in all_leads if l.call_status == 'converted']),
+        'scheduled': len([l for l in all_leads if l.call_status == 'scheduled']),
     }
 
     # Pagination

@@ -125,7 +125,7 @@ function updateQuickFilterCounts(counts) {
         document.getElementById('count-not-contacted').textContent = counts.not_contacted || 0;
         document.getElementById('count-attempted').textContent = counts.attempted || 0;
         document.getElementById('count-connected').textContent = counts.connected || 0;
-        document.getElementById('count-converted').textContent = counts.converted || 0;
+        document.getElementById('count-scheduled').textContent = counts.scheduled || 0;
     }
 }
 
