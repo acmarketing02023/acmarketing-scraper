@@ -45,13 +45,13 @@ def sync_to_setter_crm(lead):
         response = requests.post(SETTER_CRM_API, json=payload, headers=headers, timeout=5)
 
         if response.status_code in [200, 201]:
-            print(f"✅ Synced to Setter CRM: {lead.name}")
+            print(f"✅ Synced to Setter CRM: {lead.name}", flush=True)
             return True
         else:
-            print(f"⚠️ Setter CRM sync failed: {response.status_code}")
+            print(f"⚠️ Setter CRM sync failed: {response.status_code}", flush=True)
             return False
     except Exception as e:
-        print(f"❌ Error syncing to Setter CRM: {str(e)}")
+        print(f"❌ Error syncing to Setter CRM: {str(e)}", flush=True)
         return False
 
 
