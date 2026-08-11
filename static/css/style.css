@@ -397,6 +397,14 @@ body {
     background-color: #e74c3c;
 }
 
+.status-scheduled {
+    background-color: #9b59b6;
+}
+
+.status-booked {
+    background-color: #27ae60;
+}
+
 /* Action Buttons */
 .actions-cell {
     display: flex;
@@ -431,6 +439,26 @@ body {
 
 .action-btn.answered:hover {
     background-color: #c3e6cb;
+    transform: scale(1.05);
+}
+
+.action-btn.scheduled {
+    background-color: #e8daef;
+    color: #5b3a7d;
+}
+
+.action-btn.scheduled:hover {
+    background-color: #d7bde2;
+    transform: scale(1.05);
+}
+
+.action-btn.booked {
+    background-color: #d5f4e6;
+    color: #1e7145;
+}
+
+.action-btn.booked:hover {
+    background-color: #a9dfbf;
     transform: scale(1.05);
 }
 

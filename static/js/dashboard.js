@@ -161,6 +161,8 @@ function renderLeads(leads) {
             <td class="actions-cell">
                 <button class="action-btn no-answer" onclick="logCall('${lead.id}', 'attempted', ${(lead.attempts || 0) + 1})" title="Called, no answer">❌ No Answer</button>
                 <button class="action-btn answered" onclick="logCall('${lead.id}', 'connected', ${(lead.attempts || 0) + 1})" title="Called, they answered">✅ Answered</button>
+                <button class="action-btn scheduled" onclick="logCall('${lead.id}', 'scheduled', ${(lead.attempts || 0) + 1})" title="Scheduled for callback">📅 Scheduled</button>
+                <button class="action-btn booked" onclick="logCall('${lead.id}', 'booked', ${(lead.attempts || 0) + 1})" title="Booked appointment">🎯 Booked</button>
                 <button class="action-btn reset" onclick="resetLead('${lead.id}')" title="Undo/Reset this lead">↻ Reset</button>
             </td>
         </tr>
@@ -238,6 +240,8 @@ function formatStatus(status) {
         'not_contacted': 'Not Contacted',
         'attempted': 'Attempted',
         'connected': 'Connected',
+        'scheduled': 'Scheduled',
+        'booked': 'Booked',
         'converted': 'Converted',
         'declined': 'Declined'
     };

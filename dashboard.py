@@ -26,6 +26,7 @@ def sync_to_setter_crm(lead):
         outcome_map = {
             'attempted': 'NO_ANSWER',
             'connected': 'CALLBACK',
+            'booked': 'BOOKED',
         }
 
         outcome = outcome_map.get(lead.call_status, 'NO_ANSWER')
@@ -245,8 +246,8 @@ def update_lead(lead_id):
         lead.last_updated = datetime.utcnow()
         db.commit()
 
-        # Sync to Setter CRM if call_status was updated
-        if is_call_logged and lead.call_status in ['attempted', 'connected']:
+        # Sync to Setter CRM if call_status was updated (but not for 'scheduled')
+        if is_call_logged and lead.call_status in ['attempted', 'connected', 'booked']:
             sync_to_setter_crm(lead)
 
         db.close()
