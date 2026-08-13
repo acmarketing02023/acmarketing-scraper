@@ -19,20 +19,6 @@ init_db()
 SETTER_CRM_API = "https://setter-crm-kappa.vercel.app/api/calls"
 
 
-@app.route('/api/cleanup', methods=['POST'])
-def cleanup_database():
-    """Emergency cleanup - delete all leads (temporary endpoint)."""
-    db = SessionLocal()
-    try:
-        db.query(Lead).delete()
-        db.commit()
-        db.close()
-        return jsonify({'success': True, 'message': 'Database cleared'}), 200
-    except Exception as e:
-        db.close()
-        return jsonify({'success': False, 'error': str(e)}), 400
-
-
 def sync_to_setter_crm(lead):
     """Send call log to Setter CRM."""
     try:
