@@ -15,6 +15,35 @@ CORS(app)
 # Initialize DB on startup
 init_db()
 
+# Auto-cleanup if CLEANUP_DB env var is set
+if os.getenv('CLEANUP_DB') == 'true':
+    db_cleanup = SessionLocal()
+    new_lead_names = {
+        "RJ Concrete Contractor Phoenix", "MM Concrete & Construction LLC",
+        "Vanguard Professional Concrete Contractors", "Parker Brothers Concrete LLC",
+        "4C Concrete LLC", "Trademark Concrete Co.", "Caballero's Ready Mix",
+        "Lady Concrete LLC", "Armandos Concrete", "Yanez Concrete and Home Services LLC",
+        "FDW Concrete Inc", "KMR Concrete LLC", "Meadows Concrete Construction",
+        "Cito Concrete Contractors Inc", "Maya Concrete", "Morgan Construction Co",
+        "S&Z Concrete Work", "Ron's Concrete Finishing", "Concrete Salazar",
+        "Ashworth Concrete & Grading", "MDG Concrete Services LLP", "Cabarrus Concrete",
+        "Jmy Building Group LLC", "P C Masonry & Concrete", "Elite Concrete Clarksville",
+        "TCB Concrete", "Martinez Concrete", "Top Choice Concrete", "Hazlett's Concrete",
+        "Arnold Concrete Inc.", "Zane Davis Concrete", "Nashville Concrete Contractor",
+        "Concrete Pros Of Nashville", "Midstate Mobile Concrete", "Blue Ribbon Concrete Services",
+        "Backyard Builders", "Southeastern Concrete", "GSA Concrete", "Klaus Enyedi Concrete",
+        "Blaise Concrete Cutting", "Oceanside Concrete Services", "Terry's Concrete",
+        "Lunada Bay Concrete Inc", "Blue Coast Concrete Inc.", "Elite Concrete, Inc.",
+        "Integrity Concrete", "Betz Concrete Inc", "E&A Concrete Evolution, Inc.",
+        "Carson's Custom Concrete"
+    }
+    old_leads = db_cleanup.query(Lead).filter(Lead.name.notin_(new_lead_names)).all()
+    for lead in old_leads:
+        db_cleanup.delete(lead)
+    db_cleanup.commit()
+    db_cleanup.close()
+    print(f"✅ Cleaned up database", flush=True)
+
 # Setter CRM Configuration
 SETTER_CRM_API = "https://setter-crm-kappa.vercel.app/api/calls"
 
