@@ -55,9 +55,9 @@ def sync_to_setter_crm(lead):
         return False
 
 
-@app.route('/delete-all', methods=['DELETE'])
-def delete_all_leads():
-    """Delete all leads - one-time cleanup."""
+@app.route('/api/cleanup-all', methods=['POST'])
+def cleanup_all():
+    """Delete all leads."""
     db = SessionLocal()
     try:
         count = db.query(Lead).count()
