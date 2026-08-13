@@ -15,6 +15,13 @@ CORS(app)
 # Initialize DB on startup
 init_db()
 
+# One-time database reset (delete all leads)
+db_reset = SessionLocal()
+db_reset.query(Lead).delete()
+db_reset.commit()
+db_reset.close()
+print("✅ Database cleared on startup", flush=True)
+
 # Setter CRM Configuration
 SETTER_CRM_API = "https://setter-crm-kappa.vercel.app/api/calls"
 
