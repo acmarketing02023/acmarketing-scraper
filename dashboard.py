@@ -55,6 +55,22 @@ def sync_to_setter_crm(lead):
         return False
 
 
+@app.route('/api/leads/<lead_id>/delete', methods=['POST'])
+def delete_lead(lead_id):
+    """Delete a specific lead."""
+    db = SessionLocal()
+    try:
+        lead = db.query(Lead).filter(Lead.id == lead_id).first()
+        if lead:
+            db.delete(lead)
+            db.commit()
+        db.close()
+        return jsonify({'success': True}), 200
+    except Exception as e:
+        db.close()
+        return jsonify({'success': False, 'error': str(e)}), 400
+
+
 @app.route('/')
 def index():
     """Dashboard homepage."""
