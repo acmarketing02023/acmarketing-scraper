@@ -55,21 +55,6 @@ def sync_to_setter_crm(lead):
         return False
 
 
-@app.route('/api/cleanup-all', methods=['POST'])
-def cleanup_all():
-    """Delete all leads."""
-    db = SessionLocal()
-    try:
-        count = db.query(Lead).count()
-        db.query(Lead).delete()
-        db.commit()
-        db.close()
-        return jsonify({'success': True, 'deleted': count}), 200
-    except Exception as e:
-        db.close()
-        return jsonify({'success': False, 'error': str(e)}), 400
-
-
 @app.route('/')
 def index():
     """Dashboard homepage."""
