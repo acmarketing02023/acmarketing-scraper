@@ -15,13 +15,6 @@ CORS(app)
 # Initialize DB on startup
 init_db()
 
-# One-time database reset (delete all leads)
-db_reset = SessionLocal()
-db_reset.query(Lead).delete()
-db_reset.commit()
-db_reset.close()
-print("✅ Database cleared on startup", flush=True)
-
 # Setter CRM Configuration
 SETTER_CRM_API = "https://setter-crm-kappa.vercel.app/api/calls"
 
@@ -60,6 +53,21 @@ def sync_to_setter_crm(lead):
     except Exception as e:
         print(f"❌ Error syncing to Setter CRM: {str(e)}", flush=True)
         return False
+
+
+@app.route('/delete-all', methods=['DELETE'])
+def delete_all_leads():
+    """Delete all leads - one-time cleanup."""
+    db = SessionLocal()
+    try:
+        count = db.query(Lead).count()
+        db.query(Lead).delete()
+        db.commit()
+        db.close()
+        return jsonify({'success': True, 'deleted': count}), 200
+    except Exception as e:
+        db.close()
+        return jsonify({'success': False, 'error': str(e)}), 400
 
 
 @app.route('/')
