@@ -15,6 +15,86 @@ CORS(app)
 # Initialize DB on startup
 init_db()
 
+# One-time: Replace all leads with the 49 new ones if we have 80 or more
+db_check = SessionLocal()
+current_count = db_check.query(Lead).count()
+if current_count >= 80:
+    print("🔄 Replacing leads with fresh 49...", flush=True)
+    # Delete all existing leads
+    db_check.query(Lead).delete()
+    db_check.commit()
+
+    # Add the 49 new leads
+    import uuid
+    new_leads_data = [
+        ("RJ Concrete Contractor Phoenix", "(480) 573-8327", "Paradise Valley", "AZ"),
+        ("MM Concrete & Construction LLC", "(602) 370-5092", "Paradise Valley", "AZ"),
+        ("Vanguard Professional Concrete Contractors", "(602) 560-5071", "Paradise Valley", "AZ"),
+        ("Parker Brothers Concrete LLC", "(623) 248-6634", "Sun City", "AZ"),
+        ("4C Concrete LLC", "(602) 566-3813", "Avondale", "AZ"),
+        ("Trademark Concrete Co.", "(602) 499-6420", "Avondale", "AZ"),
+        ("Caballero's Ready Mix", "(480) 509-8564", "Avondale", "AZ"),
+        ("Lady Concrete LLC", "(720) 220-5511", "Lafayette", "CO"),
+        ("Armandos Concrete", "(303) 255-1767", "Northglenn", "CO"),
+        ("Yanez Concrete and Home Services LLC", "(720) 483-8789", "Northglenn", "CO"),
+        ("FDW Concrete Inc", "(303) 688-2918", "Castle Rock", "CO"),
+        ("KMR Concrete LLC", "(720) 490-8921", "Westminster", "CO"),
+        ("Meadows Concrete Construction", "(303) 430-1353", "Westminster", "CO"),
+        ("Cito Concrete Contractors Inc", "(303) 940-8206", "Broomfield", "CO"),
+        ("Maya Concrete", "(980) 208-3881", "Fort Mill", "SC"),
+        ("Morgan Construction Co", "(803) 328-2164", "Rock Hill", "SC"),
+        ("S&Z Concrete Work", "(803) 448-0763", "Rock Hill", "SC"),
+        ("Ron's Concrete Finishing", "(704) 933-1704", "Kannapolis", "NC"),
+        ("Concrete Salazar", "(980) 504-2997", "Kannapolis", "NC"),
+        ("Ashworth Concrete & Grading", "(704) 507-6116", "Kannapolis", "NC"),
+        ("MDG Concrete Services LLP", "(980) 622-6590", "China Grove", "NC"),
+        ("Cabarrus Concrete", "(704) 216-3102", "Salisbury", "NC"),
+        ("Jmy Building Group LLC", "(704) 963-3223", "Salisbury", "NC"),
+        ("P C Masonry & Concrete", "(704) 857-4515", "Salisbury", "NC"),
+        ("Elite Concrete Clarksville", "(931) 251-9471", "Clarksville", "TN"),
+        ("TCB Concrete", "(931) 378-2649", "Clarksville", "TN"),
+        ("Martinez Concrete", "(931) 237-9908", "Clarksville", "TN"),
+        ("Top Choice Concrete", "(931) 302-2509", "Clarksville", "TN"),
+        ("Hazlett's Concrete", "(931) 216-2788", "Clarksville", "TN"),
+        ("Arnold Concrete Inc.", "(615) 790-2639", "Franklin", "TN"),
+        ("Zane Davis Concrete", "(615) 948-5543", "Franklin", "TN"),
+        ("Nashville Concrete Contractor", "(615) 704-2240", "Brentwood", "TN"),
+        ("Concrete Pros Of Nashville", "(615) 239-1809", "Brentwood", "TN"),
+        ("Midstate Mobile Concrete", "(615) 533-2315", "Mount Juliet", "TN"),
+        ("Blue Ribbon Concrete Services", "(615) 642-1020", "Mount Juliet", "TN"),
+        ("Backyard Builders", "(615) 579-4556", "Hendersonville", "TN"),
+        ("Southeastern Concrete", "(615) 347-1419", "Hendersonville", "TN"),
+        ("GSA Concrete", "(760) 334-3536", "Carlsbad", "CA"),
+        ("Klaus Enyedi Concrete", "(760) 931-0445", "Carlsbad", "CA"),
+        ("Blaise Concrete Cutting", "(760) 815-0361", "Encinitas", "CA"),
+        ("Oceanside Concrete Services", "(760) 492-6717", "Oceanside", "CA"),
+        ("Terry's Concrete", "(760) 519-2504", "Oceanside", "CA"),
+        ("Lunada Bay Concrete Inc", "(760) 231-9018", "Oceanside", "CA"),
+        ("Blue Coast Concrete Inc.", "(760) 908-3069", "Oceanside", "CA"),
+        ("Elite Concrete, Inc.", "(760) 691-1993", "Escondido", "CA"),
+        ("Integrity Concrete", "(760) 233-0044", "Escondido", "CA"),
+        ("Betz Concrete Inc", "(760) 737-0444", "Escondido", "CA"),
+        ("E&A Concrete Evolution, Inc.", "(760) 522-7723", "Escondido", "CA"),
+        ("Carson's Custom Concrete", "(760) 735-9042", "Escondido", "CA"),
+    ]
+
+    for name, phone, city, state in new_leads_data:
+        lead = Lead(
+            id=str(uuid.uuid4()),
+            name=name,
+            phone=phone,
+            city=city,
+            state=state,
+            qualification='good',
+            call_status='not_contacted'
+        )
+        db_check.add(lead)
+
+    db_check.commit()
+    print(f"✅ Database reset to 49 fresh leads", flush=True)
+
+db_check.close()
+
 # Setter CRM Configuration
 SETTER_CRM_API = "https://setter-crm-kappa.vercel.app/api/calls"
 
