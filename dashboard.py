@@ -55,6 +55,21 @@ def sync_to_setter_crm(lead):
         return False
 
 
+@app.route('/clear-all', methods=['POST'])
+def clear_all():
+    """Delete all leads from database."""
+    db = SessionLocal()
+    try:
+        count = db.query(Lead).count()
+        db.query(Lead).delete()
+        db.commit()
+        db.close()
+        return jsonify({'success': True, 'deleted': count}), 200
+    except Exception as e:
+        db.close()
+        return jsonify({'success': False, 'error': str(e)}), 400
+
+
 @app.route('/api/leads/<lead_id>/delete', methods=['POST'])
 def delete_lead(lead_id):
     """Delete a specific lead."""
