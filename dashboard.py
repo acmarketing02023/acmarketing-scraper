@@ -12,8 +12,23 @@ from io import StringIO
 app = Flask(__name__, template_folder='templates', static_folder='static')
 CORS(app)
 
-# Initialize DB on startup
-init_db()
+# Initialize DB on first request
+_db_initialized = False
+
+def ensure_db_initialized():
+    """Initialize DB lazily on first request, not during build phase."""
+    global _db_initialized
+    if not _db_initialized:
+        try:
+            init_db()
+            _db_initialized = True
+        except Exception as e:
+            print(f"Warning: DB initialization deferred - {str(e)}", flush=True)
+
+@app.before_request
+def before_request():
+    """Ensure DB is initialized before handling requests."""
+    ensure_db_initialized()
 
 # Setter CRM Configuration
 SETTER_CRM_API = "https://setter-crm-kappa.vercel.app/api/calls"
