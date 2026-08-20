@@ -3,25 +3,38 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime
 from config import DATABASE_URL
-import os
 
 Base = declarative_base()
 
-# For SQLite, ensure we're using proper settings
-connect_args = {}
-if 'sqlite' in DATABASE_URL.lower():
-    connect_args = {'check_same_thread': False}
-    engine_kwargs = {'echo': False, 'connect_args': connect_args}
-else:
-    engine_kwargs = {'echo': False, 'pool_pre_ping': True, 'pool_recycle': 3600}
+# Lazy engine initialization - don't create until first use
+_engine = None
+_SessionLocal = None
 
-# Create engine
-try:
-    engine = create_engine(DATABASE_URL, **engine_kwargs)
-    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-except Exception as e:
-    print(f"Error creating database engine: {e}", flush=True)
-    raise
+def get_engine():
+    """Create engine on first use."""
+    global _engine
+    if _engine is None:
+        connect_args = {}
+        if 'sqlite' in DATABASE_URL.lower():
+            connect_args = {'check_same_thread': False}
+            _engine = create_engine(DATABASE_URL, echo=False, connect_args=connect_args)
+        else:
+            _engine = create_engine(DATABASE_URL, echo=False, pool_pre_ping=True, pool_recycle=3600)
+    return _engine
+
+def get_session_factory():
+    """Get session factory."""
+    global _SessionLocal
+    if _SessionLocal is None:
+        _SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=get_engine())
+    return _SessionLocal
+
+# Lazy callable wrapper for SessionLocal
+class LazySessionLocal:
+    def __call__(self):
+        return get_session_factory()()
+
+SessionLocal = LazySessionLocal()
 
 
 class Lead(Base):
@@ -69,8 +82,7 @@ class Lead(Base):
 
 def init_db():
     """Initialize database tables."""
-    if engine:
-        Base.metadata.create_all(bind=engine)
+    Base.metadata.create_all(bind=get_engine())
 
 
 def get_db():
