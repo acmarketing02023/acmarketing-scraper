@@ -3,18 +3,25 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime
 from config import DATABASE_URL
+import os
 
 Base = declarative_base()
 
-# Create engine with error handling
+# For SQLite, ensure we're using proper settings
+connect_args = {}
+if 'sqlite' in DATABASE_URL.lower():
+    connect_args = {'check_same_thread': False}
+    engine_kwargs = {'echo': False, 'connect_args': connect_args}
+else:
+    engine_kwargs = {'echo': False, 'pool_pre_ping': True, 'pool_recycle': 3600}
+
+# Create engine
 try:
-    engine = create_engine(DATABASE_URL, echo=False, pool_pre_ping=True, pool_recycle=3600)
+    engine = create_engine(DATABASE_URL, **engine_kwargs)
     SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 except Exception as e:
-    print(f"Warning: Database connection error: {e}", flush=True)
-    # Create a dummy engine that will fail gracefully
-    engine = None
-    SessionLocal = None
+    print(f"Error creating database engine: {e}", flush=True)
+    raise
 
 
 class Lead(Base):
