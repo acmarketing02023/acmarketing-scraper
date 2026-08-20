@@ -6,36 +6,15 @@ from config import DATABASE_URL
 
 Base = declarative_base()
 
-# Lazy initialization - don't connect during build phase
-_engine = None
-_SessionLocal = None
-
-def get_engine():
-    """Get or create the database engine lazily."""
-    global _engine
-    if _engine is None:
-        try:
-            _engine = create_engine(DATABASE_URL, echo=False, pool_pre_ping=True, pool_recycle=3600)
-        except Exception as e:
-            print(f"Warning: Could not create engine: {e}", flush=True)
-            # Return None and let the error propagate when actually needed
-            raise
-    return _engine
-
-def get_SessionLocal():
-    """Get or create the session factory lazily."""
-    global _SessionLocal
-    if _SessionLocal is None:
-        _SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=get_engine())
-    return _SessionLocal
-
-class LazySessionLocal:
-    """Callable wrapper that provides SessionLocal() syntax with lazy initialization."""
-    def __call__(self):
-        return get_SessionLocal()()
-
-# Export as SessionLocal for backward compatibility
-SessionLocal = LazySessionLocal()
+# Create engine with error handling
+try:
+    engine = create_engine(DATABASE_URL, echo=False, pool_pre_ping=True, pool_recycle=3600)
+    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+except Exception as e:
+    print(f"Warning: Database connection error: {e}", flush=True)
+    # Create a dummy engine that will fail gracefully
+    engine = None
+    SessionLocal = None
 
 
 class Lead(Base):
@@ -83,7 +62,8 @@ class Lead(Base):
 
 def init_db():
     """Initialize database tables."""
-    Base.metadata.create_all(bind=get_engine())
+    if engine:
+        Base.metadata.create_all(bind=engine)
 
 
 def get_db():
